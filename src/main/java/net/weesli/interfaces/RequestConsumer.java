@@ -1,2 +1,8 @@
-package net.weesli.interfaces;public interface RequestConsumer {
+package net.weesli.interfaces;
+
+import net.weesli.model.ResponseStatus;
+
+@FunctionalInterface
+public interface RequestConsumer {
+    void accept(ResponseStatus response);
 }
