@@ -15,5 +15,6 @@ public interface Collection {
     String name();
 
     Collection connect();
+    void close();
     ObjectMapper mapper();
 }

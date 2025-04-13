@@ -6,19 +6,20 @@ import net.weesli.http.DatabaseClient;
 import net.weesli.interfaces.Collection;
 import net.weesli.interfaces.Connection;
 import net.weesli.model.RequestDetails;
-import okhttp3.Response;
+
+import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RequestUtil {
 
     @SneakyThrows
-    public static Response send(DatabaseClient client, Collection collection, Connection connection, CollectionActionType type, RequestDetails requestDetails){
+    public static HttpResponse<String> send(DatabaseClient client, Collection collection, Connection connection, CollectionActionType type, RequestDetails requestDetails){
         return requestBuilder(client, connection,type, requestDetails);
     }
 
     @SneakyThrows
-    private static Response requestBuilder(DatabaseClient client, Connection connection, CollectionActionType type, RequestDetails details){
+    private static HttpResponse<String> requestBuilder(DatabaseClient client, Connection connection, CollectionActionType type, RequestDetails details){
         String typeName = typeConverter(type);
         Map<String,String> headers = new HashMap<>();
         headers.put("admin", connection.getUriDetails().getUser() + "=" + connection.getUriDetails().getPassword());
