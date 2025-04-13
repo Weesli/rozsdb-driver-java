@@ -1,10 +1,10 @@
 package net.weesli.model;
 
-import com.google.gson.Gson;
-import lombok.Getter;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.weesli.interfaces.Collection;
 import net.weesli.interfaces.Connection;
-public record ConnectionImpl(UriDetails uriDetails, String database, Gson gson) implements Connection {
+
+public record ConnectionImpl(UriDetails uriDetails, String database, ObjectMapper mapper) implements Connection {
     @Override
     public String getDatabase() {
         return database;
@@ -15,7 +15,8 @@ public record ConnectionImpl(UriDetails uriDetails, String database, Gson gson) 
         return
                 new CollectionImpl(
                         this,
-                        name
+                        name,
+                        this.mapper
                 );
     }
 

@@ -5,5 +5,6 @@ public enum CollectionActionType {
     DELETE,
     FINDALL,
     FINDBYID,
-    FIND
+    FIND,
+    CONNECTION
 }

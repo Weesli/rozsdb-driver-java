@@ -2,46 +2,62 @@ package net.weesli.util;
 
 import lombok.SneakyThrows;
 import net.weesli.enums.CollectionActionType;
+import net.weesli.http.DatabaseClient;
+import net.weesli.interfaces.Collection;
 import net.weesli.interfaces.Connection;
-import net.weesli.interfaces.RequestConsumer;
-import net.weesli.model.ResponseStatus;
-
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import net.weesli.model.RequestDetails;
+import okhttp3.Response;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RequestUtil {
 
     @SneakyThrows
-    public static void send(Connection connection, CollectionActionType type, Object object, RequestConsumer consumer){
-        String uri = "http://" + connection.getUriDetails().getHost() + ":" + connection.getUriDetails().getPort() + "/databases" + connection.getUriDetails().getDatabase();
-        HttpRequest request = requestBuilder(connection,type, object, uri);
-        HttpClient client = HttpClient.newBuilder().build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        consumer.accept(new ResponseStatus(response.statusCode(), response.body()));
-        client.close();
+    public static Response send(DatabaseClient client, Collection collection, Connection connection, CollectionActionType type, RequestDetails requestDetails){
+        return requestBuilder(client, connection,type, requestDetails);
     }
 
-    private static HttpRequest requestBuilder(Connection connection, CollectionActionType type, Object object, String uri){
+    @SneakyThrows
+    private static Response requestBuilder(DatabaseClient client, Connection connection, CollectionActionType type, RequestDetails details){
         String typeName = typeConverter(type);
-        HttpRequest.Builder builder = HttpRequest.newBuilder();
-        builder.setHeader("admin", connection.getUriDetails().getUser() + "=" + connection.getUriDetails().getPassword());
+        Map<String,String> headers = new HashMap<>();
+        headers.put("admin", connection.getUriDetails().getUser() + "=" + connection.getUriDetails().getPassword());
+        headers.putAll(details.headers());
         if (typeName.equals("GET")){
-            builder.GET();
+            return client.get(getPath(type), headers);
         }else {
-            builder.POST(HttpRequest.BodyPublishers.ofString(object.toString()));
+            return client.post(getPath(type), (details.hasBody() ? details.body() : ""), headers);
         }
-        builder.uri(URI.create(uri));
-        return builder.build();
     }
 
     private static String typeConverter(CollectionActionType type){
-        if (type.equals(CollectionActionType.INSERTORUPDATE)){
-            return "POST";
-        }else {
+        if (type.equals(CollectionActionType.CONNECTION)){
             return "GET";
+        }else {
+            return "POST";
         }
+    }
+
+    private static String getPath(CollectionActionType type){
+        StringBuilder builder = new StringBuilder();
+        switch (type){
+            case INSERTORUPDATE -> {
+                builder.append("insertorupdate");
+            }
+            case DELETE -> {
+                builder.append("delete");
+            }
+            case FIND -> {
+                builder.append("find");
+            }
+            case FINDALL -> {
+                builder.append("findall");
+            }
+            case FINDBYID -> {
+                builder.append("findbyid");
+            }
+        }
+        return builder.toString();
     }
 
 }
