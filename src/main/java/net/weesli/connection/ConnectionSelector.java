@@ -10,11 +10,41 @@ import net.weesli.model.UriDetails;
 import net.weesli.util.UriDecoder;
 
 /**
- * Create a new connection to database
+ * Utility class for creating a {@link Connection} to the database from a URI.
+ * <p>
+ * This class provides a static method to parse a database URI and create a
+ * fully configured {@link Connection} instance. Optional custom Jackson
+ * {@link JsonSerializer} instances can also be registered for object mapping.
+ * </p>
+ *
+ * <p><b>Usage example:</b></p>
+ * <pre>{@code
+ * Connection connection = ConnectionSelector.getConnection(
+ *     "rozsdb:localhost:1212:example:root:",
+ *     new MyCustomSerializer()
+ * );
+ * }</pre>
+ *
+ *
+ * @author Weesli
+ * @version 1.0
  */
 public class ConnectionSelector {
+
+    /**
+     * Creates a {@link Connection} to the database using the given URI.
+     * <p>
+     * The URI is decoded into a {@link UriDetails} object. Any provided
+     * {@link JsonSerializer} instances are added to the Jackson module used
+     * by the system-wide {@link ObjectMapperProvider}.
+     * </p>
+     *
+     * @param uri the full database connection URI
+     * @param gson optional custom {@link JsonSerializer} instances to register
+     * @return a configured {@link Connection} instance
+     */
     @SneakyThrows
-    public static Connection getConnection(String uri, JsonSerializer<?>...gson) {
+    public static Connection getConnection(String uri, JsonSerializer<?>... gson) {
         UriDetails uriDetails = UriDecoder.decode(uri);
         SimpleModule module = new SimpleModule();
         for (JsonSerializer<?> serializer : gson) {
