@@ -1,10 +1,19 @@
 package net.weesli.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.weesli.client.DatabaseClient;
 import net.weesli.interfaces.Collection;
 import net.weesli.interfaces.Connection;
 
-public record ConnectionImpl(UriDetails uriDetails, String database, ObjectMapper mapper) implements Connection {
+public record ConnectionImpl(UriDetails uriDetails, String database, ObjectMapper mapper, DatabaseClient client) implements Connection {
+
+    public ConnectionImpl(UriDetails uriDetails, String database, ObjectMapper mapper, DatabaseClient client) {
+        this.uriDetails = uriDetails;
+        this.database = database;
+        this.mapper = mapper;
+        this.client = client;
+    }
+
     @Override
     public String getDatabase() {
         return database;
@@ -25,4 +34,8 @@ public record ConnectionImpl(UriDetails uriDetails, String database, ObjectMappe
         return uriDetails;
     }
 
+    @Override
+    public DatabaseClient getDatabaseClient() {
+        return client;
+    }
 }

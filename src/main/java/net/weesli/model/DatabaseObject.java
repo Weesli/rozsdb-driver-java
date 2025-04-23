@@ -2,13 +2,11 @@ package net.weesli.model;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.airlift.compress.zstd.ZstdDecompressor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import net.weesli.ZSTDCompressorProvider;
+import net.weesli.provider.ZSTDCompressorProvider;
 import net.weesli.interfaces.Collection;
-import net.weesli.mapper.ObjectMapperProvider;
 
 import java.util.Base64;
 

@@ -1,4 +1,4 @@
-package net.weesli.mapper;
+package net.weesli.provider;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonFactory;

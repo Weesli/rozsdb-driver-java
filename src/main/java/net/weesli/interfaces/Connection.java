@@ -1,5 +1,6 @@
 package net.weesli.interfaces;
 
+import net.weesli.client.DatabaseClient;
 import net.weesli.model.UriDetails;
 
 /**
@@ -53,4 +54,11 @@ public interface Connection {
      * @return a {@link UriDetails} object representing the connection metadata
      */
     UriDetails getUriDetails();
+
+    /**
+     * Returns the {@link DatabaseClient} instance associated with this connection.
+     *
+     * @return the DatabaseClient instance
+     */
+    DatabaseClient getDatabaseClient();
 }

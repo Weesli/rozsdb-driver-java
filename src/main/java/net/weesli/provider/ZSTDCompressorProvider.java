@@ -1,4 +1,4 @@
-package net.weesli;
+package net.weesli.provider;
 
 import io.airlift.compress.zstd.ZstdCompressor;
 import io.airlift.compress.zstd.ZstdDecompressor;

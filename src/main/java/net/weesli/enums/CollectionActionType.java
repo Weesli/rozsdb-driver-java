@@ -6,5 +6,15 @@ public enum CollectionActionType {
     FINDALL,
     FINDBYID,
     FIND,
-    CONNECTION
+    CONNECTION;
+
+    private final String actionType;
+    private CollectionActionType() {
+        this.actionType = name().toLowerCase();
+    }
+
+    public String getChannel() {
+        return actionType;
+    }
+
 }

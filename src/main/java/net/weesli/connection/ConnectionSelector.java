@@ -3,8 +3,9 @@ package net.weesli.connection;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.SneakyThrows;
+import net.weesli.client.DatabaseClient;
 import net.weesli.interfaces.Connection;
-import net.weesli.mapper.ObjectMapperProvider;
+import net.weesli.provider.ObjectMapperProvider;
 import net.weesli.model.ConnectionImpl;
 import net.weesli.model.UriDetails;
 import net.weesli.util.UriDecoder;
@@ -51,6 +52,6 @@ public class ConnectionSelector {
             module.addSerializer(serializer);
         }
         ObjectMapperProvider.addModule(module);
-        return new ConnectionImpl(uriDetails, uriDetails.getDatabase(), ObjectMapperProvider.getInstance());
+        return new ConnectionImpl(uriDetails, uriDetails.getDatabase(), ObjectMapperProvider.getInstance(), new DatabaseClient(uriDetails));
     }
 }
